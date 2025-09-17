@@ -620,11 +620,13 @@ add_filter('upgrader_source_selection', function($source, $remote_source, $upgra
     return $source;
 }, 10, 4);
 
-// Garante que qualquer requisição ao GitHub tenha User-Agent
+// Força User-Agent em TODAS as requisições HTTP do WP para GitHub
 add_filter('http_request_args', function($args, $url) {
     if (strpos($url, 'github.com') !== false || strpos($url, 'api.github.com') !== false) {
-        if (!isset($args['headers'])) $args['headers'] = [];
-        $args['headers']['User-Agent'] = 'WordPress Updater';
+        if (!isset($args['headers'])) {
+            $args['headers'] = [];
+        }
+        $args['headers']['User-Agent'] = 'WordPress/Theme-Updater';
     }
     return $args;
 }, 10, 2);
