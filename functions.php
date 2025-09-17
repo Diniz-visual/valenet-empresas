@@ -614,7 +614,8 @@ add_filter('pre_set_site_transient_update_themes', function($transient) {
             'new_version' => $remote_version,
             'url'         => "https://github.com/$github_user/$github_repo",
             // link público do zip (não precisa token)
-            'package'     => "https://github.com/$github_user/$github_repo/archive/refs/heads/$branch.zip",
+            'package' => "https://api.github.com/repos/diniz-visual/valenet-empresas/zipball/main",
+
         ];
     }
 
