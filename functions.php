@@ -578,13 +578,9 @@ add_filter('pre_set_site_transient_update_themes', function($transient) {
     $github_repo  = 'valenet-empresas';
     $branch       = 'main';
 
-    // Cabeçalhos obrigatórios
-    $headers = ['User-Agent' => 'WordPress Updater'];
-
-    // Pega style.css remoto
     $remote_style = wp_remote_get(
         "https://raw.githubusercontent.com/$github_user/$github_repo/$branch/style.css",
-        ['headers' => $headers]
+        ['headers' => ['User-Agent' => 'WordPress Updater']]
     );
 
     if (!is_wp_error($remote_style) && isset($remote_style['body'])) {
@@ -601,15 +597,15 @@ add_filter('pre_set_site_transient_update_themes', function($transient) {
             'theme'       => $theme_slug,
             'new_version' => $remote_version,
             'url'         => "https://github.com/$github_user/$github_repo",
-            // usar API zipball
-            'package'     => "https://api.github.com/repos/$github_user/$github_repo/zipball/$branch",
+            // usa link público do zip (não exige autenticação)
+            'package'     => "https://github.com/$github_user/$github_repo/archive/refs/heads/$branch.zip",
         ];
     }
 
     return $transient;
 });
 
-// Renomeia pasta ao extrair
+// Renomeia a pasta extraída
 add_filter('upgrader_source_selection', function($source, $remote_source, $upgrader, $hook_extra) {
     if (isset($hook_extra['theme']) && $hook_extra['theme'] === 'valenet-empresas') {
         $new_source = trailingslashit(dirname($source)) . 'valenet-empresas';
@@ -619,14 +615,3 @@ add_filter('upgrader_source_selection', function($source, $remote_source, $upgra
     }
     return $source;
 }, 10, 4);
-
-// Força User-Agent em TODAS as requisições HTTP do WP para GitHub
-add_filter('http_request_args', function($args, $url) {
-    if (strpos($url, 'github.com') !== false || strpos($url, 'api.github.com') !== false) {
-        if (!isset($args['headers'])) {
-            $args['headers'] = [];
-        }
-        $args['headers']['User-Agent'] = 'WordPress/Theme-Updater';
-    }
-    return $args;
-}, 10, 2);
