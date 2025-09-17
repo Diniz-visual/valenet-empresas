@@ -667,11 +667,10 @@ function meu_tema_gutenberg_cores_personalizadas() {
 }
 add_action('after_setup_theme', 'meu_tema_gutenberg_cores_personalizadas');
 
-         /*======================= 
-            GitHub Update
-         ==========================*/
-
-         // === Atualizador do tema Valenet Empresas via GitHub ===
+/*======================= 
+  GitHub Update
+ ==========================*/
+// === Atualizador do tema Valenet Empresas via GitHub ===
 add_filter('pre_set_site_transient_update_themes', function($transient) {
     if (empty($transient->checked)) return $transient;
 
@@ -705,3 +704,6 @@ add_filter('pre_set_site_transient_update_themes', function($transient) {
 
     return $transient;
 });
+
+
+
