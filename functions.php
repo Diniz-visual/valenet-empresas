@@ -569,7 +569,7 @@ add_action('wp_head', function () {
 /*======================= 
   GitHub Update
  ==========================*/
-// === Atualizador do tema Valenet Empresas via GitHub ===
+// Atualizador do tema Valenet Empresas via GitHub — versão revisada
 add_filter('pre_set_site_transient_update_themes', function($transient) {
     if (empty($transient->checked)) return $transient;
 
@@ -578,9 +578,13 @@ add_filter('pre_set_site_transient_update_themes', function($transient) {
     $github_repo  = 'valenet-empresas';
     $branch       = 'main';
 
+    // Cabeçalho com User-Agent
+    $headers = ['User-Agent' => 'WordPress Updater'];
+
+    // Pega style.css remoto
     $remote_style = wp_remote_get(
         "https://raw.githubusercontent.com/$github_user/$github_repo/$branch/style.css",
-        ['headers' => ['User-Agent' => 'WordPress Updater']]
+        ['headers' => $headers]
     );
 
     if (!is_wp_error($remote_style) && isset($remote_style['body'])) {
@@ -597,7 +601,7 @@ add_filter('pre_set_site_transient_update_themes', function($transient) {
             'theme'       => $theme_slug,
             'new_version' => $remote_version,
             'url'         => "https://github.com/$github_user/$github_repo",
-            // usa link público do zip (não exige autenticação)
+            // link público do zip
             'package'     => "https://github.com/$github_user/$github_repo/archive/refs/heads/$branch.zip",
         ];
     }
@@ -605,7 +609,7 @@ add_filter('pre_set_site_transient_update_themes', function($transient) {
     return $transient;
 });
 
-// Renomeia a pasta extraída
+// Renomeia a pasta baixada para slug correto
 add_filter('upgrader_source_selection', function($source, $remote_source, $upgrader, $hook_extra) {
     if (isset($hook_extra['theme']) && $hook_extra['theme'] === 'valenet-empresas') {
         $new_source = trailingslashit(dirname($source)) . 'valenet-empresas';
@@ -615,3 +619,12 @@ add_filter('upgrader_source_selection', function($source, $remote_source, $upgra
     }
     return $source;
 }, 10, 4);
+
+// Força User-Agent em todas as requisições para GitHub
+add_filter('http_request_args', function($args, $url) {
+    if (strpos($url, 'github.com') !== false || strpos($url, 'raw.githubusercontent.com') !== false) {
+        if (!isset($args['headers'])) $args['headers'] = [];
+        $args['headers']['User-Agent'] = 'WordPress Updater';
+    }
+    return $args;
+}, 10, 2);
