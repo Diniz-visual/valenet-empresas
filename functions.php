@@ -670,9 +670,6 @@ add_action('after_setup_theme', 'meu_tema_gutenberg_cores_personalizadas');
 /*======================= 
   GitHub Update
  ==========================*/
-/*======================= 
-  GitHub Update
- ==========================*/
 // === Atualizador do tema Valenet Empresas via GitHub ===
 add_filter('pre_set_site_transient_update_themes', function($transient) {
     if (empty($transient->checked)) return $transient;
@@ -707,5 +704,16 @@ add_filter('pre_set_site_transient_update_themes', function($transient) {
 
     return $transient;
 });
+
+// Renomeia a pasta baixada do GitHub para o slug correto do tema
+add_filter('upgrader_source_selection', function($source, $remote_source, $upgrader, $hook_extra) {
+    if (isset($hook_extra['theme']) && $hook_extra['theme'] === 'valenet-empresas') {
+        $new_source = trailingslashit($remote_source) . 'valenet-empresas';
+        if (@rename($source, $new_source)) {
+            return $new_source;
+        }
+    }
+    return $source;
+}, 10, 4);
 
 
