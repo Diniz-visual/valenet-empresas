@@ -634,3 +634,4 @@ add_filter('http_request_args', function($args, $url) {
     }
     return $args;
 }, 10, 2);
+
