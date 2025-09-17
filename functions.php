@@ -629,7 +629,8 @@ add_filter('http_request_args', function($args, $url) {
         if (!isset($args['headers'])) $args['headers'] = [];
         $args['headers']['User-Agent'] = 'WordPress Updater';
         if (defined('DV_GITHUB_TOKEN') && DV_GITHUB_TOKEN) {
-            $args['headers']['Authorization'] = 'token ' . DV_GITHUB_TOKEN;
+           $args['headers']['Authorization'] = 'Bearer ' . DV_GITHUB_TOKEN;
+
         }
     }
     return $args;
