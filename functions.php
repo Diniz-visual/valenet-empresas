@@ -670,17 +670,21 @@ add_action('after_setup_theme', 'meu_tema_gutenberg_cores_personalizadas');
 /*======================= 
   GitHub Update
  ==========================*/
+
 // === Atualizador do tema Valenet Empresas via GitHub ===
 add_filter('pre_set_site_transient_update_themes', function($transient) {
     if (empty($transient->checked)) return $transient;
 
-    $theme_slug   = 'valenet-empresas'; // nome da pasta do tema
-    $github_user  = 'Diniz-visual';     // seu usuário no GitHub
-    $github_repo  = 'valenet-empresas'; // nome do repositório
+    $theme_slug   = 'valenet-empresas';
+    $github_user  = 'Diniz-visual';
+    $github_repo  = 'valenet-empresas';
     $branch       = 'main';
 
-    // Pega style.css remoto
-    $remote_style = wp_remote_get("https://raw.githubusercontent.com/$github_user/$github_repo/$branch/style.css");
+    // Pega style.css remoto (com User-Agent obrigatório)
+    $remote_style = wp_remote_get(
+        "https://raw.githubusercontent.com/$github_user/$github_repo/$branch/style.css",
+        ['headers' => ['User-Agent' => 'WordPress Updater']]
+    );
 
     if (!is_wp_error($remote_style) && isset($remote_style['body'])) {
         if (preg_match('/Version:\s*(.*)/i', $remote_style['body'], $matches)) {
@@ -688,32 +692,29 @@ add_filter('pre_set_site_transient_update_themes', function($transient) {
         }
     }
 
-    // Versão local
     $theme = wp_get_theme($theme_slug);
     $local_version = $theme->get('Version');
 
-    // Se houver versão maior no GitHub → update
     if (isset($remote_version) && version_compare($local_version, $remote_version, '<')) {
         $transient->response[$theme_slug] = [
             'theme'       => $theme_slug,
             'new_version' => $remote_version,
             'url'         => "https://github.com/$github_user/$github_repo",
-            'package'     => "https://github.com/$github_user/$github_repo/archive/refs/heads/$branch.zip",
+            // usar API zipball (mais confiável que archive/)
+            'package'     => "https://api.github.com/repos/$github_user/$github_repo/zipball/$branch",
         ];
     }
 
     return $transient;
 });
 
-// Renomeia a pasta baixada do GitHub para o slug correto do tema
+// Renomeia pasta ao extrair
 add_filter('upgrader_source_selection', function($source, $remote_source, $upgrader, $hook_extra) {
     if (isset($hook_extra['theme']) && $hook_extra['theme'] === 'valenet-empresas') {
-        $new_source = trailingslashit($remote_source) . 'valenet-empresas';
+        $new_source = trailingslashit(dirname($source)) . 'valenet-empresas';
         if (@rename($source, $new_source)) {
             return $new_source;
         }
     }
     return $source;
 }, 10, 4);
-
-
