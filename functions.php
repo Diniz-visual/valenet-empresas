@@ -666,3 +666,42 @@ function meu_tema_gutenberg_cores_personalizadas() {
     ));
 }
 add_action('after_setup_theme', 'meu_tema_gutenberg_cores_personalizadas');
+
+         /*======================= 
+            GitHub Update
+         ==========================*/
+
+// === Atualizador do tema Valenet Empresas via GitHub ===
+add_filter('pre_set_site_transient_update_themes', function($transient) {
+    if (empty($transient->checked)) return $transient;
+
+    $theme_slug   = 'valenet-empresas'; // nome da pasta do tema
+    $github_user  = 'Diniz-visual';     // seu usuário GitHub
+    $github_repo  = 'valenet-empresas'; // nome do repositório
+    $branch       = 'main';
+
+    // Pega o style.css remoto
+    $remote_style = wp_remote_get("https://raw.githubusercontent.com/$github_user/$github_repo/$branch/style.css");
+
+    if (!is_wp_error($remote_style) && isset($remote_style['body'])) {
+        if (preg_match('/Version:\s*(.*)/i', $remote_style['body'], $matches)) {
+            $remote_version = trim($matches[1]);
+        }
+    }
+
+    // Versão local
+    $theme = wp_get_theme($theme_slug);
+    $local_version = $theme->get('Version');
+
+    // Se houver versão maior no GitHub, adiciona update
+    if (isset($remote_version) && version_compare($local_version, $remote_version, '<')) {
+        $transient->response[$theme_slug] = [
+            'theme'       => $theme_slug,
+            'new_version' => $remote_version,
+            'url'         => "https://github.com/$github_user/$github_repo",
+            'package'     => "https://github.com/$github_user/$github_repo/archive/refs/heads/$branch.zip",
+        ];
+    }
+
+    return $transient;
+});
