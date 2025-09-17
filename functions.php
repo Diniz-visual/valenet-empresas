@@ -569,22 +569,32 @@ add_action('wp_head', function () {
 /*======================= 
   GitHub Update
  ==========================*/
-// Atualizador do tema Valenet Empresas via GitHub — versão revisada
+/*======================= 
+  GitHub Update Automático
+ ==========================*/
+
+// Força User-Agent em todas as requisições ao GitHub
+add_filter('http_request_args', function($args, $url) {
+    if (strpos($url, 'github.com') !== false || strpos($url, 'raw.githubusercontent.com') !== false) {
+        if (!isset($args['headers'])) $args['headers'] = [];
+        $args['headers']['User-Agent'] = 'WordPress Updater';
+    }
+    return $args;
+}, 10, 2);
+
+// Verifica versão e informa update
 add_filter('pre_set_site_transient_update_themes', function($transient) {
     if (empty($transient->checked)) return $transient;
 
     $theme_slug   = 'valenet-empresas';
-    $github_user  = 'Diniz-visual';
+    $github_user  = 'diniz-visual';      // ⚠️ em minúsculo
     $github_repo  = 'valenet-empresas';
     $branch       = 'main';
 
-    // Cabeçalho com User-Agent
-    $headers = ['User-Agent' => 'WordPress Updater'];
-
-    // Pega style.css remoto
+    // Checa versão remota em style.css
     $remote_style = wp_remote_get(
         "https://raw.githubusercontent.com/$github_user/$github_repo/$branch/style.css",
-        ['headers' => $headers]
+        ['headers' => ['User-Agent' => 'WordPress Updater']]
     );
 
     if (!is_wp_error($remote_style) && isset($remote_style['body'])) {
@@ -593,15 +603,17 @@ add_filter('pre_set_site_transient_update_themes', function($transient) {
         }
     }
 
+    // Versão local
     $theme = wp_get_theme($theme_slug);
     $local_version = $theme->get('Version');
 
+    // Se houver versão maior no GitHub, avisa update
     if (isset($remote_version) && version_compare($local_version, $remote_version, '<')) {
         $transient->response[$theme_slug] = [
             'theme'       => $theme_slug,
             'new_version' => $remote_version,
             'url'         => "https://github.com/$github_user/$github_repo",
-            // link público do zip
+            // link público do zip (não precisa token)
             'package'     => "https://github.com/$github_user/$github_repo/archive/refs/heads/$branch.zip",
         ];
     }
@@ -609,7 +621,7 @@ add_filter('pre_set_site_transient_update_themes', function($transient) {
     return $transient;
 });
 
-// Renomeia a pasta baixada para slug correto
+// Renomeia a pasta baixada para o slug correto
 add_filter('upgrader_source_selection', function($source, $remote_source, $upgrader, $hook_extra) {
     if (isset($hook_extra['theme']) && $hook_extra['theme'] === 'valenet-empresas') {
         $new_source = trailingslashit(dirname($source)) . 'valenet-empresas';
@@ -618,13 +630,4 @@ add_filter('upgrader_source_selection', function($source, $remote_source, $upgra
         }
     }
     return $source;
-}, 10, 4);
-
-// Força User-Agent em todas as requisições para GitHub
-add_filter('http_request_args', function($args, $url) {
-    if (strpos($url, 'github.com') !== false || strpos($url, 'raw.githubusercontent.com') !== false) {
-        if (!isset($args['headers'])) $args['headers'] = [];
-        $args['headers']['User-Agent'] = 'WordPress Updater';
-    }
-    return $args;
-}, 10, 2);
+},
