@@ -22,6 +22,14 @@ add_action('after_setup_theme', function () {
     ]);
 });
 
+// ==========================
+// GRANDES CONTAS MENU
+// ==========================
+
+
+
+
+
 
 // ==========================
 // ENQUEUE CSS/JS PÚBLICO
@@ -549,87 +557,7 @@ add_action('wp_head', function () {
 
          /*======================= 
             breadcrumb
-         ==========================*/ 
-
-         .breadcrumb-container {
-    width: 100vw;
-    margin-left: calc(-50vw + 50%);
-    position: relative;
-    text-align: center;
-    color: #fff;
-    overflow: hidden;
-    --breadcrumb-bg: none;
-    --breadcrumb-overlay: 0.5;
-    --breadcrumb-title-color: #ffffff;
-    --breadcrumb-nav-color: #ffffff;
-}
-
-.breadcrumb-bg {
-    position: relative;
-    background-color: #134888;            /* fallback padrão */
-    background-image: var(--breadcrumb-bg);
-    background-size: cover;
-    background-position: center;
-    background-repeat: no-repeat;
-    width: 100%;
-    height: 200px;
-}
-
-.breadcrumb-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background-color: rgba(0, 0, 0, var(--breadcrumb-overlay));
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.breadcrumb-content {
-    text-align: left;
-    padding: 40px 20px;
-    max-width: 1140px;
-    width: 100%;
-    margin: 0 auto;
-    z-index: 2;
-}
-
-.breadcrumb-title {
-    font-size: 2.2em;
-    margin-bottom: 10px;
-    color: var(--breadcrumb-title-color, #00beff) !important ; /* usa a cor padrão se não tiver no PHP */
-    font-weight:700 !important;
-}
-
-.breadcrumb-nav {
-    display: flex;
-    justify-content: left;
-    align-items: center;
-    flex-wrap: wrap;
-    gap: 6px;
-    margin-top: 10px;
-}
-
-.breadcrumb-nav a,
-.breadcrumb-nav span {
-    color: var(--breadcrumb-nav-color) !important;
-    text-decoration: none;
-    font-size: 1rem;
-}
-
-.breadcrumb-nav a:hover {
-    text-decoration: underline;
-}
-
-.arrow.material-symbols-outlined {
-    vertical-align: middle;
-    font-size: 18px;
-    color: #00beff !important;
-    margin-top: 2px;
-    margin-bottom: 2px;
-}
+         ==========================*/
 
 
         </style>
@@ -638,39 +566,9 @@ add_action('wp_head', function () {
     }
 });
 
-
-/** Cores Guthemberg padrão tema */
-
-function meu_tema_gutenberg_cores_personalizadas() {
-    add_theme_support('editor-color-palette', array(
-        array(
-            'name'  => __('Titulo', 'meu-tema'),
-            'slug'  => 'titulo',
-            'color' => '#134888',
-        ),
-        array(
-            'name'  => __('Cor Secundária', 'meu-tema'),
-            'slug'  => 'cor-secundaria',
-            'color' => '#0e65c3',
-        ),
-        array(
-            'name'  => __('Azul Claro', 'meu-tema'),
-            'slug'  => 'azul_claro',
-            'color' => '#00beff',
-        ),
-        array(
-            'name'  => __('Texto', 'meu-tema'),
-            'slug'  => 'texto',
-            'color' => '#1d1d1d',
-        ),
-    ));
-}
-add_action('after_setup_theme', 'meu_tema_gutenberg_cores_personalizadas');
-
 /*======================= 
   GitHub Update
  ==========================*/
-
 // === Atualizador do tema Valenet Empresas via GitHub ===
 add_filter('pre_set_site_transient_update_themes', function($transient) {
     if (empty($transient->checked)) return $transient;
@@ -680,10 +578,16 @@ add_filter('pre_set_site_transient_update_themes', function($transient) {
     $github_repo  = 'valenet-empresas';
     $branch       = 'main';
 
-    // Pega style.css remoto (com User-Agent obrigatório)
+    // Cabeçalhos obrigatórios
+    $headers = ['User-Agent' => 'WordPress Updater'];
+    if (defined('DV_GITHUB_TOKEN') && DV_GITHUB_TOKEN) {
+        $headers['Authorization'] = 'token ' . DV_GITHUB_TOKEN;
+    }
+
+    // Pega style.css remoto
     $remote_style = wp_remote_get(
         "https://raw.githubusercontent.com/$github_user/$github_repo/$branch/style.css",
-        ['headers' => ['User-Agent' => 'WordPress Updater']]
+        ['headers' => $headers]
     );
 
     if (!is_wp_error($remote_style) && isset($remote_style['body'])) {
@@ -700,7 +604,7 @@ add_filter('pre_set_site_transient_update_themes', function($transient) {
             'theme'       => $theme_slug,
             'new_version' => $remote_version,
             'url'         => "https://github.com/$github_user/$github_repo",
-            // usar API zipball (mais confiável que archive/)
+            // usar API zipball (funciona com token)
             'package'     => "https://api.github.com/repos/$github_user/$github_repo/zipball/$branch",
         ];
     }
@@ -718,3 +622,15 @@ add_filter('upgrader_source_selection', function($source, $remote_source, $upgra
     }
     return $source;
 }, 10, 4);
+
+// Garante que todas as requisições ao GitHub tenham User-Agent e Token
+add_filter('http_request_args', function($args, $url) {
+    if (strpos($url, 'github.com') !== false || strpos($url, 'api.github.com') !== false) {
+        if (!isset($args['headers'])) $args['headers'] = [];
+        $args['headers']['User-Agent'] = 'WordPress Updater';
+        if (defined('DV_GITHUB_TOKEN') && DV_GITHUB_TOKEN) {
+            $args['headers']['Authorization'] = 'token ' . DV_GITHUB_TOKEN;
+        }
+    }
+    return $args;
+}, 10, 2);
