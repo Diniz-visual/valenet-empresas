@@ -580,9 +580,6 @@ add_filter('pre_set_site_transient_update_themes', function($transient) {
 
     // Cabeçalhos obrigatórios
     $headers = ['User-Agent' => 'WordPress Updater'];
-    if (defined('DV_GITHUB_TOKEN') && DV_GITHUB_TOKEN) {
-        $headers['Authorization'] = 'token ' . DV_GITHUB_TOKEN;
-    }
 
     // Pega style.css remoto
     $remote_style = wp_remote_get(
@@ -604,7 +601,7 @@ add_filter('pre_set_site_transient_update_themes', function($transient) {
             'theme'       => $theme_slug,
             'new_version' => $remote_version,
             'url'         => "https://github.com/$github_user/$github_repo",
-            // usar API zipball (funciona com token)
+            // usar API zipball
             'package'     => "https://api.github.com/repos/$github_user/$github_repo/zipball/$branch",
         ];
     }
@@ -623,16 +620,11 @@ add_filter('upgrader_source_selection', function($source, $remote_source, $upgra
     return $source;
 }, 10, 4);
 
-// Garante que todas as requisições ao GitHub tenham User-Agent e Token
+// Garante que qualquer requisição ao GitHub tenha User-Agent
 add_filter('http_request_args', function($args, $url) {
     if (strpos($url, 'github.com') !== false || strpos($url, 'api.github.com') !== false) {
         if (!isset($args['headers'])) $args['headers'] = [];
         $args['headers']['User-Agent'] = 'WordPress Updater';
-        if (defined('DV_GITHUB_TOKEN') && DV_GITHUB_TOKEN) {
-           $args['headers']['Authorization'] = 'Bearer ' . DV_GITHUB_TOKEN;
-
-        }
     }
     return $args;
 }, 10, 2);
-
