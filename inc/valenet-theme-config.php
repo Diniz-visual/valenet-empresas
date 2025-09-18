@@ -198,7 +198,7 @@ function valenet_render_config_page() { ?>
                         <h3>Tipografia</h3>
                         <label>Fonte
                             <select name="valenet_fonte">
-                                <?php foreach (['Inter','Montserrat','Gotham','Nunito'] as $fonte): ?>
+                                <?php foreach (['Inter','Montserrat','Gotham','Nunito','Titillium Web'] as $fonte): ?>
                                     <option value="<?php echo esc_attr($fonte); ?>" <?php selected(get_option('valenet_fonte'), $fonte); ?>>
                                         <?php echo esc_html($fonte); ?>
                                     </option>

@@ -566,3 +566,34 @@ add_action('wp_head', function () {
     }
 });
 
+  /*======================= 
+            Titillium Web Font
+         ==========================*/
+add_action('wp_enqueue_scripts', function () {
+    $fonte = get_option('valenet_fonte');
+    if ($fonte === 'Titillium Web') {
+        wp_enqueue_style(
+            'valenet-font-titillium',
+            'https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&display=swap',
+            false
+        );
+    }
+});
+
+add_action('wp_head', function () {
+    $fonte = get_option('valenet_fonte');
+
+    if ($fonte === 'Titillium Web') {
+        ?>
+        <style>
+            body,
+            h1, h2, h3, h4, h5, h6,
+            p, a, span, button,
+            input, select, textarea {
+                font-family: 'Titillium Web', sans-serif !important;
+            }
+        </style>
+        <?php
+    }
+});
+
