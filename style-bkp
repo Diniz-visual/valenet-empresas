@@ -9,42 +9,9 @@ License: GNU General Public License v2 or later
 Text Domain: meu-tema
 */
 
-body {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-  background-color: #fff;
-
-  /* Evita barra de rolagem horizontal */
-  overflow-x: hidden;
-
-  /* Para dispositivos móveis */
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-.arrow.material-symbols-outlined {
-    vertical-align: middle;
-    font-size: 18px;
-    color: #00beff !important;
-    margin-top: 2px;
-    margin-bottom: 2px;
-}
-
 /*=============================
 Botões Guthemberg
 ===============================*/
-.br-100 {
-    border-radius: 999px !important;
-}
-
-.br-8 {
-    border-radius: 8px !important;
-}
-
-.br-10 {
-    border-radius: 10px !important;
-}
 
 .plano-personalizado {
   font-size:30px;
@@ -75,12 +42,6 @@ Botões Guthemberg
   text-decoration: none;
   transition: background-color .2s ease, color .2s ease, transform .2s ease;
 }
-
-.wp-block-paragraph strong {
-    font-weight: 700;
-    color: #ff0000;
-}
-
 
 /* Hover/focus – mesmas variáveis para todos */
 .wp-block-button__link:hover,
@@ -238,18 +199,18 @@ input[type="reset"]:hover {
   padding: 8px 12px;
   transition: background-color .3s ease, color .3s ease;
   border-radius: 4px;
-
 }
 
 /* Hover */
 .menu-topo-nav .nav-link:hover {
-   color:var(--menu-active-color) !important;
+
 }
 
 /* Ativo */
 .menu-topo-nav .nav-link.active,
 .menu-topo-nav .current-menu-item > .nav-link {
   color:var(--menu-active-color) !important;
+  font-weight: ;
 }
 
 /* ========================
@@ -603,25 +564,6 @@ h1, h2, h3, h4, h5 {
   transform: translateY(0);
 }
 
-/* ===== Fade In Up ===== */
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.conteudo-slide,
-.title-slide,
-.descricao-slide,
-.conteudo-slide .btn {
-  animation: fadeInUp 0.6s ease forwards;
-}
-
 
 /* Navegação (setas) */
 .slider-topo .swiper-button-next,
@@ -898,18 +840,18 @@ box-shadow: 5px 9px 6px -6px rgba(0,0,0,0.45) !important;
 /* Tag de destaque */
 .plano-card .badge {
   position: absolute;
-  background-color: #ffc400 !important;
+  background-color: #ffc400!important;
   color: #1d1d1d !important;
-  right: 15px !important;         /* distância da lateral direita */
-  left: auto !important;          /* remove centralização */
-  transform: none !important;     /* remove translate do Bootstrap */
+  top:  15px !important;           /* distância do topo */
+  right: 15px !important;          /* distância da lateral direita */
+  left: auto !important; /* remove centralização */
+  transform: none !important; /* remove translate do Bootstrap */
   text-transform: none;
   pointer-events: none !important;
+  margin: 0;  
   font-size: 12px !important;
-  margin-top: 15px !important;
-  margin-bottom: 15px !important;
+  
 }
-
 
 .texto-legal{
   color: var(--site-text-color) !important;
@@ -1105,44 +1047,39 @@ CTA Não decidiu
   transition: transform 0.5s ease;
 }
 
-
+.ndaose-media:hover img {
+  transform: scale(1.05);
+}
 
 /* Gradiente sobre a imagem */
+.ndaose-gradient {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to top right, rgba(0,0,0,0.5), rgba(0,0,0,0));
+  pointer-events: none;
+}
 
 /* Conteúdo */
 .nao-decidiu-content {
   max-width: 500px;
-  padding-top: 80px !important;
-  padding-bottom: 80px !important;
 }
 
 .subtitulo-cta {
-  font-size: 1rem !important;
-  color: #00beff !important; /* verde bootstrap */
-  font-weight: 700 !important;
-  margin-bottom: 10px !important;
-  
+  font-size: 0.9rem;
+  margin-bottom: 0.5rem;
+  color: #198754; /* verde bootstrap */
 }
 
 .titulo-cta {
-  font-size: 32px !important;
-  line-height: 1;
-  font-weight: 800 !important;
-  color: #134888 !important;
-  text-align: left !important;
+  font-size: 2rem;
+  line-height: 1.2;
 }
 
 .content-nao-decidiu {
-  font-size: 1rem;             /* Tamanho de fonte confortável */
-  line-height: 1.75;           /* Espaçamento entre linhas para melhor leitura */
-  color: #333;                 /* Cor mais suave que preto absoluto */
-  text-align: justify;            /* Garante alinhamento consistente */
-  letter-spacing: 0.01em;      /* Espaço sutil entre letras */
-  margin-bottom: 1.5rem;       /* Espaço depois do parágrafo */
-  max-width: 720px;            /* Limita largura para facilitar leitura */
-
+  font-size: 1rem;
+  color: #1d1d1d;
+  line-height: 1.6;
 }
-
 
 /* Botão customizado */
 .nao-decidiu-content .btn {
@@ -1454,33 +1391,6 @@ CTA Não decidiu
   padding-bottom: 30px !important;
 }
 
-/* Centraliza a paginação dentro da seção */
-.solucoes-swiper-section .swiper-pagination {
-  display: flex;
-  justify-content: center;     /* <- Centraliza horizontalmente */
-  align-items: center;         /* Alinha verticalmente, útil se bullets forem maiores */
-  gap: 6px;                    /* Espaço entre bullets */
-  margin-top: 30px !important;            /* Espaço superior entre carrossel e bullets */
-}
-
-/* Estilo padrão dos bullets */
-.solucoes-swiper-section .swiper-pagination-bullet {
-  width: 10px;
-  height: 10px;
-  background: #9aa0a6;
-  opacity: 0.5;
-  border-radius: 50%;
-  transition: background 0.2s ease, opacity 0.2s ease;
-}
-
-/* Bullet ativo (ex: slide atual) */
-.solucoes-swiper-section .swiper-pagination-bullet-active {
-  background: #134888 !important;
-  opacity: 1;
-}
-
-
-
 .solucao-card {
   position: relative;
   border-radius: 16px;
@@ -1589,7 +1499,7 @@ CTA Não decidiu
 /* hover */
 .solucao-card:hover {
   transform: translateY(-2px);
-  box-shadow: 5px 9px 6px -6px rgba(0,0,0,0.45) !important;
+  box-shadow: 0 12px 20px rgba(0, 0, 0, 0.18);
 }
 
 .solucao-card:hover .solucao-cta {
@@ -1996,14 +1906,13 @@ h4.valenet-empresas{
 /* ===== Single Soluções ===== */
 
 .conteudo-single-solucoes{
-  max-width: 1200px;   /* tamanho máximo */
+  max-width: 1600px;   /* tamanho máximo */
   width: 100%;         /* ocupa 100% até o máximo */
   margin: 0 auto;      /* centraliza horizontalmente */
   padding: 0 16px;     /* respiro nas laterais no mobile (opcional) */
   box-sizing: border-box;
   margin-top: 100px;
   margin-bottom: 100px;
-
 
 }
 
@@ -2140,7 +2049,7 @@ Grandes Contas
 }
 
 .slider-topo,
-.hero-topo {
+.hero-topo { /* já cobre sua <section class="hero-topo"> */ 
   position: relative;
   overflow: hidden;
 }
@@ -2174,18 +2083,19 @@ Grandes Contas
   transition: background 0.25s ease;
 }
 
-/* Conteúdo */
+/* Conteúdo (mesma base do .conteudo-slide) */
 .conteudo-slide,
 .conteudo-grandes-contas {
   position: relative;
   z-index: 2;
+
   height: 100%;
   display: grid;
-  align-content: center;
+  align-content: center;        /* centraliza verticalmente o bloco */
   gap: 1rem;
 
   width: min(600px, 92vw);
-
+  padding: clamp(16px, 4vw, 40px);
 
   margin-left: clamp(24px, 15vw, 15%);
   margin-right: auto;
@@ -2211,7 +2121,7 @@ Grandes Contas
   opacity: 0.95;
 }
 
-/* Botão */
+/* Botão dentro do conteúdo */
 .conteudo-slide .btn,
 .conteudo-grandes-contas .btn {
   max-width: 200px;
@@ -2234,73 +2144,57 @@ Grandes Contas
   opacity: 0.95;
 }
 .conteudo-slide .btn:active,
-.conteudo-grandes-contas .btn:active {
-  transform: translateY(0);
-}
+.conteudo-grandes-contas .btn:active { transform: translateY(0); }
 
 /* ====== BREAKPOINTS ====== */
 @media (max-width: 1200px) {
   .conteudo-slide,
   .conteudo-grandes-contas {
-
-    max-width: 400px !important;
-    
+    width: min(520px, 90vw);
   }
 }
 
 @media (max-width: 992px) {
   .conteudo-slide,
   .conteudo-grandes-contas {
+    margin-left: auto;
     margin-right: auto;
     text-align: left;
     width: min(560px, 94vw);
   }
-  .descricao-slide {
-    margin-right: auto;
-  }
+  .descricao-slide { margin-left: auto; margin-right: auto; }
 }
 
 @media (max-width: 768px) {
-
   .conteudo-slide,
   .conteudo-grandes-contas {
-    width: 300px;
-    margin-left: 80px;
+    padding: clamp(16px, 5vw, 28px);
+    width: 350px;
+  }
+  .descricao-slide { font-size: clamp(14px, 4vw, 18px); }
 
-  }
-  .descricao-slide {
-    font-size: clamp(14px, 4vw, 18px);
-    max-width: 200px;
-  }
-  .title-slide {
-    font-size: 32px;
-  }
+.titulo-slide{
+  font-size: 32px;
 }
+
+}
+
+
 
 @media (max-width: 480px) {
   .conteudo-slide,
   .conteudo-grandes-contas {
-   margin-left: 15px;
-   margin-right: auto;
-  }
-  .title-slide {
-    width: 80vw;
-  }
-
-  .hero-grandes-contas {
-    height: 360px;
-}
-}
-
-@media (max-width: 375px) {
-  .slide-home-grandes-contas {
+    width: 65vw;
+    padding: 16px;
   
-}
-    .hero-grandes-contas {
-    height: 380px;
+  }
+
+  .title-slide{
+    width: 55vw;
     
+  }
 }
-}
+
 /*========================= Seções ======================================= */
 
 /*========================== Seções (01, 02 e 03) =============================*/

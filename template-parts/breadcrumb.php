@@ -1,9 +1,8 @@
 <?php
 // Função do Breadcrumb
 if (!function_exists('custom_breadcrumb')) {
-    function custom_breadcrumb($background_url = '', $opacidade_decimal = 0.5, $cor_titulo = '#ffffff', $cor_navegacao = '#ffffff') {
+    function custom_breadcrumb($background_url = '', $opacidade_decimal = 0.0, $cor_titulo = '#ffffff', $cor_navegacao = '#ffffff') {
         if (!is_front_page()) : ?>
-
             <div class="breadcrumb-container" 
                  style="--breadcrumb-bg: url('<?php echo esc_url($background_url); ?>');
                         --breadcrumb-overlay: <?php echo esc_attr($opacidade_decimal); ?>;
@@ -40,7 +39,6 @@ if (!function_exists('custom_breadcrumb')) {
                     </div>
                 </div>
             </div>
-
         <?php endif;
     }
 }
@@ -54,19 +52,15 @@ if (have_rows('topo_beneficios')) :
         $cor_navegacao = get_sub_field('cor_navegacao_breadcrumb') ?: '#ffffff';
         $opacidade     = get_sub_field('opacidade_breadcrumb');
 
-        // URL da imagem
         $background_url = $imagem ? esc_url($imagem['url']) : '';
+        $opacidade_decimal = is_numeric($opacidade)
+            ? max(0, min(100, intval($opacidade))) / 100
+            : 0.0;
 
-        // Opacidade via RANGE (0–100 → 0.xx)
-        if (is_numeric($opacidade)) {
-            $opacidade_decimal = max(0, min(100, intval($opacidade))) / 100;
-        } else {
-            $opacidade_decimal = 0.5; // fallback
-        }
-
-        // Renderiza o breadcrumb
         custom_breadcrumb($background_url, $opacidade_decimal, $cor_titulo, $cor_navegacao);
 
     endwhile;
+else :
+    // Fallback claro (sem azul escuro)
+    custom_breadcrumb('', 0.0, '#ffffff', '#ffffff');
 endif;
-?>

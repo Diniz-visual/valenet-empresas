@@ -151,29 +151,27 @@ get_header('grandes-contas'); ?>
             </span>
           </div>
         </div>
+<!-- Texto -->
+<div class="col-lg-6">
+  <div class="conteudo-section-01">
+    <span class="sub-title-01"><?php the_sub_field('sub_titulo_01'); ?></span>
 
-        <!-- Texto -->
-        <div class="col-lg-6">
-          <div class="conteudo-section-01">
-             <span class="sub-title-01"><?php the_sub_field( 'sub_titulo_01' ); ?></span>
-            <?php if ( $titulo ) : ?>
-              <h2 class="section-01-title"><?php echo esc_html( $titulo ); ?></h2>
-            <?php endif; ?>
+    <?php if ( $titulo ) : ?>
+      <h2 class="section-01-title"><?php echo esc_html( $titulo ); ?></h2>
+    <?php endif; ?>
 
-            <?php if ( $descricao ) : ?>
-              <p class="section-01-desc"><?php echo esc_html( $descricao ); ?></p>
-            <?php endif; ?>
+    <?php if ( $descricao ) : ?>
+      <p class="section-01-desc"><?php echo wp_kses_post( $descricao ); ?></p>
+    <?php endif; ?>
 
-            <?php if ( $cta_text && $cta_link ) : ?>
-              <a href="<?php echo esc_url( $cta_link ); ?>" class="btn-pill">
-                <?php echo esc_html( $cta_text ); ?>
-              </a>
-            <?php endif; ?>
-          </div>
-        </div>
+    <?php if ( $cta_text && $cta_link ) : ?>
+      <a href="<?php echo esc_url( $cta_link ); ?>" class="btn-pill" id="<?php the_sub_field( 'cta_section_01' ); ?>">
+        <?php echo esc_html( $cta_text ); ?>
+      </a>
+    <?php endif; ?>
+  </div>
+</div>
 
-      </div>
-    </div>
   </section>
 
   <?php endwhile; ?>
@@ -201,28 +199,31 @@ get_header('grandes-contas'); ?>
     <div class="container">
       <div class="row align-items-center gy-5">
 
-        <!-- Texto (esquerda) -->
-        <div class="col-lg-6">
-            <div class="conteudo-section-02">
-            <?php if ( $eyebrow ) : ?>
-              <span class="eyebrow"><?php echo esc_html($eyebrow); ?></span>
-            <?php endif; ?>
+     <!-- Texto (esquerda) -->
+<div class="col-lg-6">
+  <div class="conteudo-section-02">
 
-            <?php if ( $titulo ) : ?>
-              <h2 class="section-02-title"><?php echo wp_kses_post($titulo); ?></h2>
-            <?php endif; ?>
+    <?php if ( $eyebrow ) : ?>
+      <span class="eyebrow"><?php echo esc_html($eyebrow); ?></span>
+    <?php endif; ?>
 
-            <?php if ( $descricao ) : ?>
-              <p class="section-02-desc"><?php echo esc_html($descricao); ?></p>
-            <?php endif; ?>
+    <?php if ( $titulo ) : ?>
+      <h2 class="section-02-title"><?php echo wp_kses_post($titulo); ?></h2>
+    <?php endif; ?>
 
-            <?php if ( $cta_text ) : ?>
-              <a href="<?php echo esc_url( $cta_link ?: '#' ); ?>" class="btn-pill">
-                <?php echo esc_html($cta_text); ?>
-              </a>
-            <?php endif; ?>
-          </div>
-        </div>
+    <?php if ( $descricao ) : ?>
+      <p class="section-02-desc"><?php echo wp_kses_post($descricao); ?></p>
+    <?php endif; ?>
+
+    <?php if ( $cta_text ) : ?>
+      <a href="<?php echo esc_url( $cta_link ?: '#' ); ?>" class="btn-pill" id="<?php the_sub_field( 'cta_section_02' ); ?>">
+        <?php echo esc_html($cta_text); ?>
+      </a>
+    <?php endif; ?>
+
+  </div>
+</div>
+
 
         <!-- Imagem (direita) -->
         <div class="col-lg-6">
@@ -274,30 +275,30 @@ get_header('grandes-contas'); ?>
                     <?php endif; ?>
 
                     <!-- Conteúdo -->
-                    <div class="col-lg-6">
-                        <div class="conteudo-section-03">
-                            <?php if ($sub_titulo): ?>
-                            <span class="sub-title-03"><?php the_sub_field( 'sub_titulo_03' ); ?></span>
-                              <?php endif; ?>
+                   <div class="col-lg-6">
+  <div class="conteudo-section-03">
 
-                            <?php if ($titulo): ?>
-                                <h2 class="section-03-title"><?php echo esc_html($titulo); ?></h2>
-                            <?php endif; ?>
+    <?php if ($sub_titulo): ?>
+      <span class="sub-title-03"><?php echo esc_html($sub_titulo); ?></span>
+    <?php endif; ?>
 
-                            <?php if ($descricao): ?>
-                                <p class="section-03-desc"><?php echo esc_html($descricao); ?></p>
-                            <?php endif; ?>
+    <?php if ($titulo): ?>
+      <h2 class="section-03-title"><?php echo esc_html($titulo); ?></h2>
+    <?php endif; ?>
 
-                            <?php if ($cta_texto && $cta_link): ?>
-                                <a href="<?php echo esc_url($cta_link); ?>" class="btn-pill-dark">
-                                    <?php echo esc_html($cta_texto); ?>
-                                </a>
-                            <?php endif; ?>
-                        </div>
-                    </div>
+    <?php if ($descricao): ?>
+      <p class="section-03-desc"><?php echo wp_kses_post($descricao); ?></p>
+    <?php endif; ?>
 
-                </div>
-            </div>
+    <?php if ($cta_texto && $cta_link): ?>
+      <a href="<?php echo esc_url($cta_link); ?>" class="btn-pill-dark" id="<?php the_sub_field( 'cta_section_03' ); ?>">
+        <?php echo esc_html($cta_texto); ?>
+      </a>
+    <?php endif; ?>
+
+  </div>
+</div>
+
         </section>
     <?php
         endif; // fim do if de verificação

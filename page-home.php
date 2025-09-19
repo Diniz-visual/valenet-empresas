@@ -937,7 +937,7 @@ if ( $q->have_posts() ) : ?>
       </div>
 
       <!-- Controles -->
-      <div class="swiper-pagination"></div>
+      <div class="nossas-solucoes swiper-pagination"></div>
 
     </div>
   </div>

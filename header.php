@@ -8,9 +8,11 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
 
   <!-- Material Symbols (Outlined) -->
-   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,100..700,0..1,-50..200&icon_names=double_arrow" />
-  <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:FILL@0..1,wght@100..700,GRAD@-50..200,opsz@20..48" rel="stylesheet" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
   
+<!-- Fonte -->
+ <link href="https://fonts.googleapis.com/css2?family=Titillium+Web:wght@300;400;600;700&display=swap" rel="stylesheet">
+
   <!-- Title dinâmico -->
   <title><?php echo wp_get_document_title(); ?></title>
 

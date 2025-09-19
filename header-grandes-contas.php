@@ -9,32 +9,7 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" />
 
-  <style>
-    .menu-topo {
-      border-bottom: 1px solid #e0e0e0;
-      background-color: #fff;
-    }
-
-    .menu-grandes-contas-nav .nav-link {
-      color: var(--menu-link-color, #333);
-      padding: 8px 12px;
-      transition: background-color .3s ease, color .3s ease;
-      border-radius: 4px;
-      font-weight: 500;
-    }
-
-    .menu-grandes-contas-nav .nav-link:hover {
-      color: var(--menu-hover-color, #007bff);
-      background-color: rgba(0, 0, 0, 0.05);
-    }
-
-    .menu-grandes-contas-nav .nav-link.active,
-    .menu-grandes-contas-nav .current-menu-item > .nav-link {
-      color: var(--menu-active-color, #000) !important;
-      font-weight: 600;
-      background-color: rgba(0, 0, 0, 0.08);
-    }
-  </style>
+ 
 </head>
 <body <?php body_class(); ?>>
 
@@ -112,7 +87,7 @@
           'container'      => 'div',
           'container_class'=> 'collapse navbar-collapse',
           'container_id'   => 'mainMenu',
-          'menu_class'     => 'navbar-nav ms-auto mb-2 mb-lg-0 menu-grandes-contas-nav',
+          'menu_class'     => 'navbar-nav ms-auto mb-2 mb-lg-0 menu-topo-nav',
           'fallback_cb'    => false,
           'walker'         => class_exists('Bootstrap_Navwalker') ? new Bootstrap_Navwalker() : '',
         ]);

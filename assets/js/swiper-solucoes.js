@@ -1,102 +1,76 @@
-document.addEventListener('DOMContentLoaded', function () {
-  const sectionSelector = '.solucoes-swiper-section';
-  const MAX_PER_VIEW = 4; // maior slidesPerView nos breakpoints
+document.addEventListener("DOMContentLoaded", function () {
+  const containerSelector = ".solucoes-swiper";
 
-  function ensureMinSlides(container) {
-    const wrapper = container.querySelector('.swiper-wrapper');
-    if (!wrapper) return;
-
-    const clonedAlready = wrapper.querySelector('.swiper-slide[data-clone="1"]');
-    if (clonedAlready) return; // evita clonar novamente ao reinit
-
-    const originals = Array.from(wrapper.querySelectorAll('.swiper-slide'));
-    const origCount = originals.length;
-
-    // Se tiver menos que o máximo exibido no desktop, duplicamos até ter o suficiente
-    if (origCount > 0 && origCount < MAX_PER_VIEW) {
-      // alvo = o dobro do necessário p/ loop ficar suave
-      const target = MAX_PER_VIEW * 2;
-      let i = 0;
-      while (wrapper.querySelectorAll('.swiper-slide').length < target) {
-        const clone = originals[i % origCount].cloneNode(true);
-        clone.setAttribute('data-clone', '1');
-        wrapper.appendChild(clone);
-        i++;
-      }
-    }
-  }
-
-  function initOne(section) {
-    const container  = section.querySelector('.solucoes-swiper');
-    const pagination = section.querySelector('.swiper-pagination');
-    const nextEl     = container?.querySelector('.swiper-button-next');
-    const prevEl     = container?.querySelector('.swiper-button-prev');
-
-    if (!container) return;
-
-    // 1) Garante quantidade mínima de slides para loop ficar perfeito
-    ensureMinSlides(container);
-
-    // 2) Conta os slides (já com possíveis clones)
-    const slidesCount = container.querySelectorAll('.swiper-wrapper .swiper-slide').length;
-
-    // 3) Destrói instância anterior
+  function initOne(container) {
+    // destruir instância anterior se existir
     if (container.__swiperInstance) {
       container.__swiperInstance.destroy(true, true);
       container.__swiperInstance = null;
     }
 
-    // 4) Inicia o Swiper
-    const swiper = new Swiper(container, {
-      loop: true,                       // loop sempre ativo
-      loopFillGroupWithBlank: false,    // sem "fantasmas"
-      loopAdditionalSlides: 8,          // margem extra p/ reciclar com suavidade
-      speed: 600,
-      grabCursor: true,
+    const slidesCount = container.querySelectorAll(".swiper-slide").length;
 
+    const swiper = new Swiper(container, {
+      loop: true,
+      watchOverflow: true,
       autoplay: {
         delay: 4000,
         disableOnInteraction: false,
-        pauseOnMouseEnter: true,
+        pauseOnMouseEnter: true
       },
+      spaceBetween: 20,
+      slidesPerView: 1,
 
       pagination: {
-        el: pagination,
-        clickable: true,
-        dynamicBullets: true,
+        el: container.querySelector(".swiper-pagination"),
+        clickable: true
       },
 
       navigation: {
-        nextEl: nextEl,
-        prevEl: prevEl,
+        nextEl: container.querySelector(".swiper-button-next"),
+        prevEl: container.querySelector(".swiper-button-prev")
       },
 
-      // anda de 1 em 1 sempre, para não sobrar grupo incompleto
-      slidesPerView: 1,
-      slidesPerGroup: 1,
-      spaceBetween: 20,
-
       breakpoints: {
-        576:  { slidesPerView: 2, slidesPerGroup: 1, spaceBetween: 20 },
-        768:  { slidesPerView: 3, slidesPerGroup: 1, spaceBetween: 20 },
-        1024: { slidesPerView: 3, slidesPerGroup: 1, spaceBetween: 20 },
-        1200: { slidesPerView: 4, slidesPerGroup: 1, spaceBetween: 20 },
+        576:  { slidesPerView: 2, spaceBetween: 20 },
+        768:  { slidesPerView: 2, spaceBetween: 20 },
+        1024: { slidesPerView: 3, spaceBetween: 20 },
+        1200: { slidesPerView: 4, spaceBetween: 20 }
       },
 
       a11y: { enabled: true },
-      keyboard: { enabled: true, onlyInViewport: true },
-      // Se tiver só 1 slide original, ainda assim vai rodar pois clonamos acima
-      allowTouchMove: slidesCount > 1
+      keyboard: { enabled: true, onlyInViewport: true }
     });
+
+    // 🔎 esconder bullets no desktop se tiver exatamente 4 slides
+    const paginationEl = container.querySelector(".swiper-pagination");
+    if (paginationEl) {
+      const checkPagination = () => {
+        const currentSlidesPerView = swiper.params.slidesPerView;
+        const activeBp = swiper.currentBreakpoint;
+
+        // pega config do breakpoint ativo
+        const bpConfig = swiper.params.breakpoints[activeBp];
+        const perView = bpConfig ? bpConfig.slidesPerView : currentSlidesPerView;
+
+        if (window.innerWidth >= 1200 && slidesCount <= perView) {
+          paginationEl.style.display = "none";
+        } else {
+          paginationEl.style.display = "";
+        }
+      };
+
+      // checa agora e a cada resize
+      checkPagination();
+      window.addEventListener("resize", checkPagination);
+    }
 
     container.__swiperInstance = swiper;
   }
 
-  const sections = document.querySelectorAll(sectionSelector);
-  sections.forEach(initOne);
+  const containers = document.querySelectorAll(containerSelector);
+  containers.forEach(initOne);
 
-  // Reinit ao redimensionar/orientação — clones são feitos só uma vez
-  const reinit = () => sections.forEach(initOne);
-  window.addEventListener('resize', reinit);
-  window.addEventListener('orientationchange', reinit);
+  window.addEventListener("resize", () => containers.forEach(initOne));
+  window.addEventListener("orientationchange", () => containers.forEach(initOne));
 });
